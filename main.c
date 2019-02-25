@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct class_record {
     char name[10];
@@ -97,6 +98,84 @@ int main() {
     car_t greg = {"Greg", "Toyota", "Camry", 164879.3, 2000};
 
     printf("%s's %d %s %s has %.1f miles on it.\n", greg.owner, greg.year, greg.make, greg.model, greg.miles);
+
+    // Part 6
+    //explicit allocation of an integer on the heap
+    int *array_size = (int *) malloc(sizeof(int));
+    int size = 8;
+
+    // check if the allocation was successful
+    // if it was, the pointer will be non-NULL
+    if (array_size == NULL) {
+        printf("ERROR: Memory allocation failed!\n");
+        return 1;
+    } else {
+        *array_size = 7;
+    }
+
+    // explicit allocation of an integer array on the heap
+    int *int_array = (int *) malloc(*array_size * sizeof(int));
+
+    // check if the allocation was successful
+    // if it was, the pointer will be non-NULL
+    if (int_array == NULL) {
+        printf("ERROR: Memory allocation failed!\n");
+        return 0;
+    } else {
+        for (int i = 0; i < *array_size; i ++) {
+            int_array[i] = i * *array_size;
+            printf("Array element %d holds %d\n", i, int_array[i]);
+        }
+    }
+
+    // free the allocated memory:
+    // dynamically allocated memory
+    // has to be released explicitly
+    free(array_size);
+    array_size = NULL; // this is good practice in case
+    // the pointer might get reused
+
+    free(int_array);
+    int_array == NULL;
+
+    // 6-iii
+    double ***cube_arr;
+
+    // allocate 1st dimension
+    cube_arr = (double ***) malloc(sizeof(double**) * 1000);
+
+    // allocate 2nd dimension
+    for (int i=0; i<1000; i++) {
+        cube_arr[i] = (double**) malloc(sizeof(double*) * 1000);
+    }
+
+    // allocate 3rd dimension
+    for (int i=0; i<1000; i++) {
+        for(int j=0;j<1000;j++){
+            cube_arr[i][j] = (double*) malloc(sizeof(double)*1000);
+        }
+    }
+
+    // use of cube_arr
+    // blah blah blah
+
+    // free 3rd dim
+    for (int i=0; i<1000; i++) {
+        for(int j=0;j<1000;j++){
+            free(cube_arr[i][j]);
+            cube_arr[i][j]=NULL;
+        }
+    }
+
+    // free 2nd dim
+    for (int i=0; i<1000; i++) {
+        free(cube_arr[i]);
+        cube_arr[i]=NULL
+    }
+
+    // free 1st dim
+    free(cube_arr);
+    cube_arr=NULL;
 
     return 0;
 }
